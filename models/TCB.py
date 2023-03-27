@@ -16,7 +16,7 @@ class TCN(nn.Module):
         self.output_dim = output_dim
         self.num_layers = num_layers
         self.outchannel = num_channels[-1]
-        self.sen_len = 32
+        self.sen_len = 12
         '''att'''
         self.fc1 = nn.Linear(self.outchannel,5*3) 
         self.fc2 = nn.Linear(5*3,self.outchannel)
@@ -90,7 +90,7 @@ class TCN(nn.Module):
         sen_rnn = sen_outs.contiguous().view(self.batch_size, -1, 2 * self.hidden_dim)
         ''' Fetch the truly last hidden layer of both sides
         '''
-        sen_lengths = [32,32]
+        sen_lengths = [12,12]
         #sen_lengths = [32]
         sen_lengths = torch.tensor(sen_lengths)
         #sen_lengths =sen_lengths.cuda()
