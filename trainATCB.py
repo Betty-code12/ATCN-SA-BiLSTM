@@ -97,19 +97,19 @@ def test(model,dataset,args,criterion):
             total_batch_num = total_batch_num+1
             #读数据
             vdata =Variable(batch['tdata'])
-            batch_vdata = numpy.empty([args.batch_size,32,4000],dtype=numpy.float64)
+            batch_vdata = numpy.empty([args.batch_size,12,10000],dtype=numpy.float64)
             for i in range(args.batch_size):
                 x = vdata[i,:,:]
                 x = x.reshape(-1,1)
                 ms = MinMaxScaler(feature_range=(0,255))
                 x = ms.fit_transform(x)
-                x = x.reshape(32,4000)
+                x = x.reshape(12,10000)
                 batch_vdata[i,:,:] = x
             batch_vdata = torch.tensor(batch_vdata)
             vdata = batch_vdata
             vdata = vdata.float()
             vdata = vdata.to(device)
-            vdata = vdata.view(args.batch_size * 32,1,4000)
+            vdata = vdata.view(args.batch_size * 12,1,10000)
             vlabel = Variable(batch['label'])
             save_label=vlabel.unsqueeze(1)
             #total_label[0+j*args.batch_size:8+j*args.batch_size,:]=save_label
@@ -252,7 +252,7 @@ def main(args):
         model = TCN(batch_size=args.batch_size,
                                 input_dim=args.hid,
                                 hidden_dim=args.nhid,
-                                output_dim=4,
+                                output_dim=6,
                                 input_size=args.input,
                                 num_channels=channel_sizes,
                                 kernel_size=args.ksize,
@@ -287,19 +287,19 @@ def main(args):
             for j,batch in enumerate(train_data_loader):    
                 batch_x =Variable(batch['tdata'])
                 '''for 归一化'''
-                batch_data = numpy.empty([args.batch_size,32,4000],dtype=numpy.float64)
+                batch_data = numpy.empty([args.batch_size,12,10000],dtype=numpy.float64)
                 for i in range(args.batch_size):
                     x = batch_x[i,:,:]
                     x = x.reshape(-1,1)
                     ms = MinMaxScaler(feature_range=(0,255))
                     x = ms.fit_transform(x)
-                    x = x.reshape(32,4000)
+                    x = x.reshape(12,10000)
                     batch_data[i,:,:] = x
                 batch_data = torch.tensor(batch_data)
                 batch_x = batch_data
                 batch_x =batch_x.float()
                 batch_x = batch_x.to(device)
-                batch_x = batch_x.view(args.batch_size * 32,1,4000)
+                batch_x = batch_x.view(args.batch_size * 12,1,10000)
                 batch_y = Variable(batch['label'])
                 batch_y = batch_y.to(device)
                 ####a是一个batch中分类准确的数量,l返回一个batch的loss
